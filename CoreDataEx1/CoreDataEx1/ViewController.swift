@@ -2,59 +2,91 @@
 //  ViewController.swift
 //  CoreDataEx1
 //
-//  Created by Omar Albeik on 11/10/15.
+//  Created by Omar Albeik on 12/10/15.
 //  Copyright © 2015 Omar Albeik. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var names = [Student]()
+    var people = [Person]()
     
     var sharedContext: NSManagedObjectContext {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let sharedContext = appDelegate.managedObjectContext
-        return sharedContext
+        return CoreDataStackManager.sharedInstance().managedObjectContext
     }
     
+    //MARK: Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set tableView delegates
-        tableView.dataSource = self
         tableView.delegate = self
+        tableView.dataSource = self
         
-        names = fetchAllStudents()
+        people = fetchAllPeople()
+        
+    }
+    
+    //MARK: CoreData methods
+    func fetchAllPeople() -> [Person] {
+        let fetchRequest = NSFetchRequest(entityName: "Person")
+        
+        do {
+            return try sharedContext.executeFetchRequest(fetchRequest) as! [Person]
+        } catch {
+            return [Person]()
+        }
+    }
+    
+    func saveAPerson(name: String) {
+        
+        let entity = NSEntityDescription.entityForName("Person", inManagedObjectContext: sharedContext)!
+        let person = NSManagedObject(entity: entity, insertIntoManagedObjectContext: sharedContext) as! Person
+        person.name = name
+        
+        do {
+            try sharedContext.save()
+            people.append(person)
+        } catch {
+            print("Error adding name to context")
+        }
+        
     }
     
     
     //MARK: tableView methods
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return names.count
+        return people.count
     }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell!
-        let thisName: String = names[indexPath.row].name as String!
-        cell.textLabel?.text = thisName
+        let cell = tableView.dequeueReusableCellWithIdentifier("nameCell")!
+        cell.textLabel?.text = people[indexPath.row].name!
+        
         return cell
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("toPersonVCSegue", sender: self)
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         switch editingStyle {
         case .Delete:
-            let thisName = names[indexPath.row]
-            names.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            sharedContext.deleteObject(thisName)
             
-            do {
+            let thisPerson = people[indexPath.row]
+            people.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            sharedContext.deleteObject(thisPerson)
+            
+            do  {
                 try sharedContext.save()
             } catch {
-                print("error saving data")
+                print("Can't save the context after deleting")
             }
             
         default:
@@ -62,46 +94,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    
-    func fetchAllStudents() -> [Student] {
-        let fetchRequest = NSFetchRequest(entityName: "Student")
-        
-        do {
-            return try sharedContext.executeFetchRequest(fetchRequest) as! [Student]
-        } catch {
-            return [Student]()
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "toPersonVCSegue" {
+            let personVC = segue.destinationViewController as! PersonViewController
+            let selectedPerson = tableView.indexPathForSelectedRow!.row
+            personVC.name = people[selectedPerson].name!
         }
     }
     
-    func saveAStudent(name: String) {
-        let entity =  NSEntityDescription.entityForName("Student", inManagedObjectContext:sharedContext)
-        let student = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: sharedContext) as! Student
-        student.setValue(name, forKey: "name")
-        
-        do {
-            try sharedContext.save()
-            names.append(student)
-        } catch {
-            print("error adding name to sharedContext")
-        }
-        
-        do {
-            
-        }
-        
-    }
-    
-    @IBAction func addBarButtonTapped(sender: UIBarButtonItem) {
+    @IBAction func addButtonTapped(sender: UIBarButtonItem) {
         
         let alert = UIAlertController(title: "New Name", message: "Add a new name", preferredStyle: .Alert)
         
         alert.addTextFieldWithConfigurationHandler(nil)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        
         let addAction = UIAlertAction(title: "Add", style: .Default) { (action: UIAlertAction) -> Void in
-            self.saveAStudent((alert.textFields?.first?.text)!)
-            self.tableView.reloadData()
+            if let name = alert.textFields?.first?.text {
+                self.saveAPerson(name)
+                self.tableView.reloadData()
+            }
         }
         
         alert.addAction(cancelAction)
@@ -109,13 +121,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         presentViewController(alert, animated: true, completion: nil)
     }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     
 }
 

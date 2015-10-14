@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  CoreDataEx1
+//  CoreDataEx2
 //
 //  Created by Omar Albeik on 12/10/15.
 //  Copyright © 2015 Omar Albeik. All rights reserved.

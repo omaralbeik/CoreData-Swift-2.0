@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "07E1400F1BCBE140003BE432"
-               BuildableName = "CoreDataEx1.app"
-               BlueprintName = "CoreDataEx1"
-               ReferencedContainer = "container:CoreDataEx1.xcodeproj">
+               BlueprintIdentifier = "07C8970D1BCB644A0043B891"
+               BuildableName = "CoreDataEx2.app"
+               BlueprintName = "CoreDataEx2"
+               ReferencedContainer = "container:CoreDataEx2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "07E1400F1BCBE140003BE432"
-            BuildableName = "CoreDataEx1.app"
-            BlueprintName = "CoreDataEx1"
-            ReferencedContainer = "container:CoreDataEx1.xcodeproj">
+            BlueprintIdentifier = "07C8970D1BCB644A0043B891"
+            BuildableName = "CoreDataEx2.app"
+            BlueprintName = "CoreDataEx2"
+            ReferencedContainer = "container:CoreDataEx2.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "07E1400F1BCBE140003BE432"
-            BuildableName = "CoreDataEx1.app"
-            BlueprintName = "CoreDataEx1"
-            ReferencedContainer = "container:CoreDataEx1.xcodeproj">
+            BlueprintIdentifier = "07C8970D1BCB644A0043B891"
+            BuildableName = "CoreDataEx2.app"
+            BlueprintName = "CoreDataEx2"
+            ReferencedContainer = "container:CoreDataEx2.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "07E1400F1BCBE140003BE432"
-            BuildableName = "CoreDataEx1.app"
-            BlueprintName = "CoreDataEx1"
-            ReferencedContainer = "container:CoreDataEx1.xcodeproj">
+            BlueprintIdentifier = "07C8970D1BCB644A0043B891"
+            BuildableName = "CoreDataEx2.app"
+            BlueprintName = "CoreDataEx2"
+            ReferencedContainer = "container:CoreDataEx2.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
